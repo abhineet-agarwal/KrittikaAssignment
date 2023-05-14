@@ -1,0 +1,21 @@
+import requests
+import csv
+page=requests.get("https://krittikaiitb.github.io/team/")
+from bs4 import BeautifulSoup
+soup=BeautifulSoup(page.content, 'html.parser')
+soup.find_all('p')
+team=soup.find_all('h5')
+year=2022
+j=0
+for i in soup.find_all('p')[1:]:
+    if(i.get_text()[:4]=='Team'):
+        year=year-1
+        continue
+    team[j]=[team[j].get_text(), i.get_text(), year]
+    j=j+1
+    if(j>len(soup.find_all('h5'))-1):
+        break
+with open('KrittikaTeam', 'w') as f:
+    write = csv.writer(f)
+    write.writerows(team)
+
